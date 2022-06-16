@@ -16,4 +16,13 @@ talkerRouter.get('/', (_req, res) => {
   res.status(200).json(getTalker());
 });
 
+talkerRouter.get('/:id', (req, res) => {
+  const { id } = req.params;
+  const talkerId = getTalker().find((tal) => Number(tal.id) === Number(id));
+  if (!talkerId) {
+    res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  }
+  res.status(200).json(talkerId);
+});
+
 module.exports = talkerRouter;
