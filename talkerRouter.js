@@ -1,24 +1,29 @@
 const express = require('express');
-const fs = require('fs');
+const fs = require('fs/promises');
 const path = require('path');
 
 const talkerPath = path.join(__dirname, 'talker.json');
 
-const getTalker = () => JSON.parse(fs.readFileSync(talkerPath, 'utf8'));
+const getTalker = async () => {
+  const talker = await fs.readFile(talkerPath, 'utf8'); 
+  return JSON.parse(talker);
+};
 
 const talkerRouter = express.Router();
 
-talkerRouter.get('/', (_req, res) => {
-  if (getTalker() === undefined) {
+talkerRouter.get('/', async (_req, res) => {
+  const talker = await getTalker();
+  if (talker === undefined) {
     res.status(200).send([]);
     return;
   }
-  res.status(200).json(getTalker());
+  res.status(200).json(talker);
 });
 
-talkerRouter.get('/:id', (req, res) => {
+talkerRouter.get('/:id', async (req, res) => {
   const { id } = req.params;
-  const talkerId = getTalker().find((tal) => Number(tal.id) === Number(id));
+  const talker = await getTalker();
+  const talkerId = talker.find((tal) => Number(tal.id) === Number(id));
   if (!talkerId) {
     res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   }
