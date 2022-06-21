@@ -89,6 +89,21 @@ const authMiddleware = (req, res, next) => {
   next();
 };
 
+talkerRouter.get('/search', authMiddleware, async (req, res) => {
+  const { q } = req.query;
+  const talker = await getTalker();
+  const filtered = talker.filter((tal) => tal.name.includes(q));
+  if (!q || q === '') {
+    res.status(200).json(talker);
+    return;
+  }
+  if (filtered === undefined) {
+    res.status(200).send([]);
+    return;
+  }
+  res.status(200).json(filtered);
+});
+
 talkerRouter.get('/:id', async (req, res) => {
   const { id } = req.params;
   const talker = await getTalker();
