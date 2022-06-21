@@ -89,6 +89,19 @@ const authMiddleware = (req, res, next) => {
   next();
 };
 
+talkerRouter.delete('/:id', authMiddleware, async (req, res) => {
+  const { id } = req.params;
+  const talker = await getTalker();
+  const index = talker.findIndex((tal) => Number(tal.id) === Number(id));
+  if (index === -1) {
+    res.status(401).json({ message: 'palestrante não encontrado' });
+    return;
+  }
+  talker.splice(index, 1);
+  updateTalker(talker);
+  res.sendStatus(204).end();
+});
+
 talkerRouter.get('/search', authMiddleware, async (req, res) => {
   const { q } = req.query;
   const talker = await getTalker();
@@ -144,19 +157,6 @@ talkerRouter.put('/:id', authMiddleware,
     } catch (error) {
       res.status(500).json(error.message);
     }
-});
-
-talkerRouter.delete('/:id', authMiddleware, async (req, res) => {
-  const { id } = req.params;
-  const talker = await getTalker();
-  const index = talker.findIndex((tal) => Number(tal.id) === Number(id));
-  if (index === -1) {
-    res.status(401).json({ message: 'palestrante não encontrado' });
-    return;
-  }
-  talker.splice(index, 1);
-  updateTalker(talker);
-  res.sendStatus(204).end();
 });
 
 talkerRouter.post('/', authMiddleware,
