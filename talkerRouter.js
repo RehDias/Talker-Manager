@@ -131,6 +131,19 @@ talkerRouter.put('/:id', authMiddleware,
     }
 });
 
+talkerRouter.delete('/:id', authMiddleware, async (req, res) => {
+  const { id } = req.params;
+  const talker = await getTalker();
+  const index = talker.findIndex((tal) => Number(tal.id) === Number(id));
+  if (index === -1) {
+    res.status(401).json({ message: 'palestrante não encontrado' });
+    return;
+  }
+  talker.splice(index, 1);
+  updateTalker(talker);
+  res.sendStatus(204).end();
+});
+
 talkerRouter.post('/', authMiddleware,
   validateName,
   validateAge,
