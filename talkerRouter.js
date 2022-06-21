@@ -63,11 +63,11 @@ const validateTalkAndWatchedAt = (req, res, next) => {
 const validateRate = (req, res, next) => {
   const { talk } = req.body;
 
-  if (!talk.rate) {
+  if (talk.rate === '' || talk.rate === undefined) {
     res.status(400).json({ message: 'O campo "rate" é obrigatório' });
     return;
   }
-  if (Number.isNaN(talk.rate) || Number(talk.rate) < 1 || Number(talk.rate) > 5) {
+  if (Number(talk.rate) < 1 || Number(talk.rate) > 5) {
     res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
     return;
   }
@@ -109,6 +109,28 @@ talkerRouter.get('/', async (_req, res) => {
   res.status(200).json(talker);
 });
 
+talkerRouter.put('/:id', authMiddleware,
+  validateName,
+  validateAge,
+  validateTalkAndWatchedAt,
+  validateRate,
+  async (req, res) => {
+    const { id } = req.params;
+    try {
+      const talker = await getTalker();
+      const index = talker.findIndex((tal) => Number(tal.id) === Number(id));
+      if (index === -1) {
+        res.status(401).json({ message: 'palestrante não encontrado' });
+        return;
+      }
+      talker[index] = { ...talker[index], ...req.body };
+      updateTalker([...talker, talker[index]]);
+      res.status(200).json(talker[index]);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+});
+
 talkerRouter.post('/', authMiddleware,
   validateName,
   validateAge,
@@ -123,7 +145,7 @@ talkerRouter.post('/', authMiddleware,
       updateTalker(talker);
       res.status(201).json(newTalker);
     } catch (err) {
-      res.status(500).end();
+      res.status(500).json(err.message);
     }
 });
 
