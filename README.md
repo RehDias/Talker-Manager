@@ -6,7 +6,7 @@
 
 <h3>Tecnologias utilizadas</h3>
 
-<p>Essa aplicação é desenvolvida em Node.js e Express. O docker-compose foi feito pela Trybe.</p>
+<p>Essa aplicação é desenvolvida em Node.js e Express. O docker-compose foi desenvolvido pela Trybe.</p>
 
 <h3>Aplicação</h3>
 
