@@ -2,7 +2,7 @@
 
 <h2>Sobre</h2>
 
-<p>Neste projeto é desenvolvido uma aplicação de cadastro de palestrantes, onde é possível cadastrar, visualizar, pesquisar, editar e excluir informações. Foi meu 4º projeto no módulo de back-end na Trybe, estava aprendendo introdução ao Node.js e API REST.</p>
+<p>Neste projeto é desenvolvido uma aplicação de cadastro de palestrantes, onde é possível cadastrar, visualizar, pesquisar, editar e excluir informações. Foi meu 4º projeto no módulo de back-end na Trybe, estava aprendendo introdução ao Node.js e API REST com express.</p>
 
 <h3>Tecnologias utilizadas</h3>
 
